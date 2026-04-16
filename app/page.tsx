@@ -53,7 +53,7 @@ export default function Home() {
         A wordle clone built with Next.js and Tailwind CSS.
       </p>
       {words.length > 0 && (
-        <div className="mt-6 text-lg">
+        <div className="text-lg">
           {guesses.map((guess, index) => {
             if (index < guesses.length - 1) {
               const guessStatus = checkGuess(guess, word || "");
@@ -88,7 +88,7 @@ export default function Home() {
           {gameStatus === GameStatus.Playing ? (
             <>
               {" "}
-              <div className="flex justify-center mt-3 mb-3 gap-2">
+              <div className="flex justify-center mt-6 mb-6 gap-2">
                 <LetterTile
                   letter={guess[0] || ""}
                   status={LetterStatus.Unused}
