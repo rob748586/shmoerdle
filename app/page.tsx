@@ -1,4 +1,5 @@
 "use client";
+
 import { GameStatus, LetterStatus } from "@/lib/enumerations";
 import loadWordset from "@/lib/loadWordset";
 import Image from "next/image";
@@ -6,6 +7,7 @@ import { useState, useEffect } from "react";
 import Keyboard from "./components/Keyboard";
 import LetterTile from "./components/LetterTile";
 import { checkGuess } from "@/app/components/CheckGuess";
+import StatusBar from "./components/StatusBar";
 
 export default function Home() {
   const [guesses, setGuesses] = useState<string[]>([]);
@@ -137,22 +139,7 @@ export default function Home() {
               />
             </>
           ) : null}
-          {gameStatus === GameStatus.Won && (
-            <div className="mt-4 text-green-500 text-xl font-bold">
-              Congratulations! You've guessed the word!
-            </div>
-          )}
-          {gameStatus === GameStatus.Lost && (
-            <div className="mt-4 text-red-500 text-xl font-bold">
-              Sorry, you've run out of guesses. The word was{" "}
-              <strong>{word}</strong>.
-            </div>
-          )}
-          {gameStatus !== GameStatus.Playing && (
-            <div className="mt-4 text-blue-500 text-xl font-bold">
-              Please refresh to play again.
-            </div>
-          )}
+          <StatusBar status={gameStatus} word={word || ""} />
         </div>
       )}
       <div className="bottom-0 absolute">
