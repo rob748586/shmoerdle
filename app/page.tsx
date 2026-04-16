@@ -57,8 +57,8 @@ export default function Home() {
   return (
     <div className="flex flex-col flex-1 items-center justify-center bg-zinc-200 font-sans dark:bg-black">
       <main className="flex flex-1 w-full max-w-7xl flex-col items-center justify-between dark:bg-black sm:items-start">
-        <div className="flex flex-col items-center justify-center w-full flex-1 text-center">
-          <h1 className="text-6xl font-bold">Welcome to Shmoerdle!</h1>
+        <div className="flex flex-col items-center justify-center w-full flex-1 text-center ">
+          <h1 className="text-6xl font-bold mb-3">Welcome to Shmoerdle!</h1>
           <p className="mt-3 text-2xl">
             A wordle clone built with Next.js and Tailwind CSS.
           </p>
