@@ -14,6 +14,7 @@ export default function Home() {
   const [word, setWord] = useState<string | null>(null);
   const [words, setWords] = useState<string[]>([]);
   const [gameStatus, setGameStatus] = useState(GameStatus.Playing);
+  const [notFound, setNotFound] = useState<string[]>([]);
 
   function chooseRandomWord() {
     if (words.length === 0) {
@@ -110,10 +111,12 @@ export default function Home() {
                 />
               </div>
               <Keyboard
+                notFound={notFound}
                 onLetterClick={(letter) => {
                   if (gameStatus !== GameStatus.Playing) {
                     return;
                   }
+
                   // If the last guess is empty, start a new guess with the clicked letter.
                   const newGuess = (guesses[guesses.length - 1] || "") + letter;
                   // If the new guess is 5 letters or less, update the current guess.
@@ -122,15 +125,35 @@ export default function Home() {
                   }
                   // If the new guess is exactly 5 letters, finalize the guess and start a new empty guess.
                   if (newGuess.length === 5) {
+                    // Update notFound letters based on the new guess, disabling
+                    // letters on the keyboard that are not in the word.
+                    let temp = [...notFound];
+                    for (const letter of newGuess) {
+                      if (
+                        !word?.toUpperCase()?.includes(letter.toUpperCase())
+                      ) {
+                        // If the letter is not in the word and not already in the notFound list, add it to the list.
+                        if (!temp.includes(letter.toUpperCase())) {
+                          temp = [...temp, letter.toUpperCase()];
+                        }
+                      }
+                    }
+                    // Update the notFound state with the new list of letters to disable on the keyboard.
+                    setNotFound([...temp]);
+
+                    // Finalize the current guess and start a new empty guess.
                     setGuesses([...guesses.slice(0, -1), newGuess, ""]);
                   }
 
-                  if (guesses.length > 0 && newGuess === word) {
+                  if (
+                    guesses.length > 0 &&
+                    newGuess.toUpperCase() === word?.toUpperCase()
+                  ) {
                     setGameStatus(GameStatus.Won);
                   }
                   if (
                     guesses.length >= 5 &&
-                    newGuess !== word &&
+                    newGuess.toUpperCase() !== word?.toUpperCase() &&
                     newGuess.length === 5
                   ) {
                     setGameStatus(GameStatus.Lost);
