@@ -18,5 +18,9 @@ export default function Keyboard(props: {
       ))}
     </div>
   ));
-  return <div className="flex flex-col gap-1">{buttons}</div>;
+  return (
+    <div className="flex flex-col gap-1 border border-gray-300 rounded-md p-1">
+      {buttons}
+    </div>
+  );
 }

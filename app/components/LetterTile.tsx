@@ -7,10 +7,14 @@ export default function LetterTile(props: {
   const { letter, status } = props;
 
   const statusClasses = {
-    [LetterStatus.Correct]: "bg-green-500 text-white",
-    [LetterStatus.Present]: "bg-yellow-500 text-white",
-    [LetterStatus.Absent]: "bg-gray-500 text-white",
-    [LetterStatus.Unused]: "bg-gray-200 text-gray-500",
+    [LetterStatus.Correct]:
+      "bg-green-500 text-white border border-gray-400 rounded-md",
+    [LetterStatus.Present]:
+      "bg-yellow-500 text-white border border-gray-400 rounded-md",
+    [LetterStatus.Absent]:
+      "bg-gray-500 text-white border border-gray-400 rounded-md",
+    [LetterStatus.Unused]:
+      "bg-gray-200 text-gray-500 border border-gray-400 rounded-md",
   };
 
   const tileClass = statusClasses[status] || "bg-gray-200 text-gray-500";

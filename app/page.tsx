@@ -6,8 +6,9 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import Keyboard from "./components/Keyboard";
 import LetterTile from "./components/LetterTile";
-import { checkGuess } from "@/app/components/CheckGuess";
 import StatusBar from "./components/StatusBar";
+import GuessStatusBar from "./components/GuessStatusBar";
+import BackSpace from "./components/BackSpace";
 
 export default function Home() {
   const [guesses, setGuesses] = useState<string[]>([]);
@@ -56,39 +57,15 @@ export default function Home() {
         <div className="text-lg">
           {guesses.map((guess, index) => {
             if (index < guesses.length - 1) {
-              const guessStatus = checkGuess(guess, word || "");
               return (
-                <div key={index} className="flex justify-center mt-4 gap-2">
-                  <div className="flex gap-2">
-                    <LetterTile
-                      letter={guess[0] || ""}
-                      status={guessStatus[0]}
-                    />
-                    <LetterTile
-                      letter={guess[1] || ""}
-                      status={guessStatus[1]}
-                    />
-                    <LetterTile
-                      letter={guess[2] || ""}
-                      status={guessStatus[2]}
-                    />
-                    <LetterTile
-                      letter={guess[3] || ""}
-                      status={guessStatus[3]}
-                    />
-                    <LetterTile
-                      letter={guess[4] || ""}
-                      status={guessStatus[4]}
-                    />
-                  </div>
-                </div>
+                <GuessStatusBar guess={guess} word={word || ""} key={index} />
               );
             }
           })}
           {gameStatus === GameStatus.Playing ? (
             <>
               {" "}
-              <div className="flex justify-center mt-6 mb-6 gap-2">
+              <div className="flex justify-center mt-6 mb-6 gap-2 bg-gray-50 border border-gray-800 dark:bg-gray-800 p-4 rounded-md">
                 <LetterTile
                   letter={guess[0] || ""}
                   status={LetterStatus.Unused}
@@ -108,6 +85,15 @@ export default function Home() {
                 <LetterTile
                   letter={guess[4] || ""}
                   status={LetterStatus.Unused}
+                />
+                <BackSpace
+                  onClick={() => {
+                    const newGuess = (guesses[guesses.length - 1] || "").slice(
+                      0,
+                      -1,
+                    );
+                    setGuesses([...guesses.slice(0, -1), newGuess]);
+                  }}
                 />
               </div>
               <Keyboard
