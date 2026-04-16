@@ -19,12 +19,12 @@ function validateWord(word: string) {
 }
 
 export default async function loadWordset() {
-  const filePath = process.cwd() + "/public/filtered.json";
+  const filePath = process.cwd() + "/public/aacompletewordset.json";
   const wordset = fs.readFileSync(filePath, "utf-8");
   const definitions = JSON.parse(wordset);
 
   const filtered = Object.keys(definitions).filter((word) =>
-    validateWord(word),
+    validateWord(word.toUpperCase()),
   );
   return filtered;
 }
