@@ -36,7 +36,6 @@ export async function getMeanings(word: string) {
   const meanings = definitions[word].meanings.map(
     (meaning: any) => meaning.def,
   );
-  console.log(meanings);
 
   return meanings;
 }
