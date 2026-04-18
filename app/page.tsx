@@ -102,7 +102,7 @@ export default function Home() {
     if (newGuess.length === 5) {
       // Update notFound letters based on the new guess, disabling
       // letters on the keyboard that are not in the word.
-      let temp = [...notFound];
+      let temp = [...notFoundRef.current];
       for (const letter of newGuess) {
         if (!word?.toUpperCase()?.includes(letter.toUpperCase())) {
           // If the letter is not in the word and not already in the notFound list, add it to the list.
