@@ -3,7 +3,7 @@
 // Main game page component that manages the game state and renders the game interface, including the header,
 // guess history, input controls, and win/loss display.
 
-import { GameStatus, KeyCode } from "@/lib/enumerations";
+import { GameStatus } from "@/lib/enumerations";
 import { loadWordset, getMeanings } from "@/lib/WordServerActions";
 import { useState, useEffect, useRef } from "react";
 import GuessHistoryBoard from "./components/GuessHistoryBoard";
