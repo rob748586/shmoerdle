@@ -18,7 +18,7 @@ function validateWord(word: string) {
   return true;
 }
 
-export default async function loadWordset() {
+export async function loadWordset() {
   const filePath = process.cwd() + "/public/aacompletewordset.json";
   const wordset = fs.readFileSync(filePath, "utf-8");
   const definitions = JSON.parse(wordset);
@@ -27,4 +27,16 @@ export default async function loadWordset() {
     validateWord(word.toUpperCase()),
   );
   return filtered;
+}
+
+export async function getMeanings(word: string) {
+  const filePath = process.cwd() + "/public/aacompletewordset.json";
+  const wordset = fs.readFileSync(filePath, "utf-8");
+  const definitions = JSON.parse(wordset);
+  const meanings = definitions[word].meanings.map(
+    (meaning: any) => meaning.def,
+  );
+  console.log(meanings);
+
+  return meanings;
 }

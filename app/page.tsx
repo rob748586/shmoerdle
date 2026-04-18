@@ -4,7 +4,7 @@
 // guess history, input controls, and win/loss display.
 
 import { GameStatus } from "@/lib/enumerations";
-import loadWordset from "@/lib/loadWordset";
+import { loadWordset, getMeanings } from "@/lib/WordServerActions";
 import { useState, useEffect } from "react";
 import GuessHistoryBoard from "./components/GuessHistoryBoard";
 import InputControl from "./components/InputControl";
@@ -17,6 +17,7 @@ export default function Home() {
   const [words, setWords] = useState<string[]>([]);
   const [gameStatus, setGameStatus] = useState(GameStatus.Playing);
   const [notFound, setNotFound] = useState<string[]>([]);
+  const [meanings, setMeanings] = useState<string[]>([]);
 
   useEffect(() => {
     // fetch the wordset from the server.
@@ -32,6 +33,7 @@ export default function Home() {
       const randomIndex = Math.floor(Math.random() * words.length);
       const randomWord = words[randomIndex];
       setWord(randomWord);
+      getMeanings(randomWord).then((wordMeanings) => setMeanings(wordMeanings));
     }
     // If the wordset is not loaded, fetch it and choose a random word.
     if (words.length === 0) {
@@ -134,6 +136,7 @@ export default function Home() {
             />
           ) : (
             <GameWinLoseDisplay
+              meanings={meanings}
               status={gameStatus}
               word={word || ""}
               resetGame={() => resetGame()}
@@ -141,7 +144,7 @@ export default function Home() {
           )}
         </div>
       )}
-      <div className="bottom-0 absolute">
+      <div className="mt-4 text-gray-700 text-sm text-center">
         <p>Loaded {words.length} words from the wordset.</p>
       </div>
     </div>
