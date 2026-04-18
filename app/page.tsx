@@ -93,10 +93,13 @@ export default function Home() {
     }
 
     // Test win/loss conditions after the new guess is added to the guesses list.
+
+    // If the player has made at least one guess and the last guess matches the word, set the game status to Won.
     if (guesses.length > 0 && newGuess.toUpperCase() === word?.toUpperCase()) {
       setGameStatus(GameStatus.Won);
     }
     if (
+      // If the player has made 5 guesses and the last guess is not correct, set the game status to Lost.
       guesses.length >= 5 &&
       newGuess.toUpperCase() !== word?.toUpperCase() &&
       newGuess.length === 5
