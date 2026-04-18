@@ -1,14 +1,15 @@
 "use client";
 
-import { GameStatus, LetterStatus } from "@/lib/enumerations";
+// Main game page component that manages the game state and renders the game interface, including the header,
+// guess history, input controls, and win/loss display.
+
+import { GameStatus } from "@/lib/enumerations";
 import loadWordset from "@/lib/loadWordset";
-import Image from "next/image";
 import { useState, useEffect } from "react";
-import Keyboard from "./components/Keyboard";
-import LetterTile from "./components/LetterTile";
-import StatusBar from "./components/StatusBar";
 import GuessHistoryBoard from "./components/GuessHistoryBoard";
-import BackSpace from "./components/BackSpace";
+import InputControl from "./components/InputControl";
+import Header from "./components/Header";
+import GameWinLoseDisplay from "./components/GameWinLoseDisplay";
 
 export default function Home() {
   const [guesses, setGuesses] = useState<string[]>([]);
@@ -17,32 +18,43 @@ export default function Home() {
   const [gameStatus, setGameStatus] = useState(GameStatus.Playing);
   const [notFound, setNotFound] = useState<string[]>([]);
 
-  function chooseRandomWord() {
-    if (words.length === 0) {
-      return null;
-    }
-    const randomIndex = Math.floor(Math.random() * words.length);
-    const randomWord = words[randomIndex];
-    setWord(randomWord);
-  }
-
-  async function fetchWordset() {
-    const wordset = await loadWordset();
-    setWords(wordset);
-  }
-
   useEffect(() => {
+    // fetch the wordset from the server.
+    async function fetchWordset() {
+      const wordset = await loadWordset();
+      setWords(wordset);
+    }
+    // choose a random word from the wordset and set it as the current word to guess.
+    function chooseRandomWord() {
+      if (words.length === 0) {
+        return null;
+      }
+      const randomIndex = Math.floor(Math.random() * words.length);
+      const randomWord = words[randomIndex];
+      setWord(randomWord);
+    }
+    // If the wordset is not loaded, fetch it and choose a random word.
     if (words.length === 0) {
-      fetchWordset();
+      fetchWordset().then(() => chooseRandomWord());
     } else {
+      // If the wordset is already loaded and no word is currently set, choose a random word. (used when resetting the game)
       if (!word) {
         chooseRandomWord();
       }
     }
-  }, [words]);
+  }, [words, word]);
+
+  function resetGame() {
+    // resets the game state and chooses a new random word from the wordset.
+    setGuesses([]);
+    setNotFound([]);
+    setGameStatus(GameStatus.Playing);
+    setWord(null);
+  }
 
   function DeleteLetter() {
     {
+      // remove the last letter from the guess and update the guesses list
       const newGuess = (guesses[guesses.length - 1] || "").slice(0, -1);
       setGuesses([...guesses.slice(0, -1), newGuess]);
     }
@@ -96,16 +108,7 @@ export default function Home() {
   const guess = guesses[guesses.length - 1] || "";
   return (
     <div className="flex flex-col flex-1 items-center justify-start bg-zinc-200 font-sans dark:bg-black ">
-      <Image
-        src="/shmoerdle.png"
-        loading="eager"
-        alt="Logo"
-        width={200}
-        height={200}
-      />
-      <p className="text-2xl mx-4 text-center text-gray-700 dark:text-gray-300">
-        A wordle clone built with Next.js and Tailwind CSS.
-      </p>
+      <Header />
       {words.length > 0 && (
         <div className="text-lg">
           {guesses.map((guess, index) => {
@@ -120,38 +123,19 @@ export default function Home() {
             }
           })}
           {gameStatus === GameStatus.Playing ? (
-            <>
-              {" "}
-              <div className="flex justify-center mt-6 mb-6 gap-2 bg-gray-50 border border-gray-800 dark:bg-gray-800 p-4 rounded-md">
-                <LetterTile
-                  letter={guess[0] || ""}
-                  status={LetterStatus.Unused}
-                />
-                <LetterTile
-                  letter={guess[1] || ""}
-                  status={LetterStatus.Unused}
-                />
-                <LetterTile
-                  letter={guess[2] || ""}
-                  status={LetterStatus.Unused}
-                />
-                <LetterTile
-                  letter={guess[3] || ""}
-                  status={LetterStatus.Unused}
-                />
-                <LetterTile
-                  letter={guess[4] || ""}
-                  status={LetterStatus.Unused}
-                />
-                <BackSpace onClick={() => DeleteLetter()} />
-              </div>
-              <Keyboard
-                notFound={notFound}
-                onLetterClick={(letter) => LetterEntered(letter)}
-              />
-            </>
-          ) : null}
-          <StatusBar status={gameStatus} word={word || ""} />
+            <InputControl
+              guess={guess}
+              notFound={notFound}
+              onLetterEntered={(letter: string) => LetterEntered(letter)}
+              onDelete={() => DeleteLetter()}
+            />
+          ) : (
+            <GameWinLoseDisplay
+              status={gameStatus}
+              word={word || ""}
+              resetGame={() => resetGame()}
+            />
+          )}
         </div>
       )}
       <div className="bottom-0 absolute">

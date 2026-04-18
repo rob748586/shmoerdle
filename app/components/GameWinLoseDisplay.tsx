@@ -1,7 +1,13 @@
 import { GameStatus } from "@/lib/enumerations";
 
-export default function StatusBar(props: { status: GameStatus; word: string }) {
-  const { status, word } = props;
+// GameWinLoseDisplay component that renders the win/loss message and a reset button based on the game status.
+
+export default function GameWinLoseDisplay(props: {
+  status: GameStatus;
+  word: string;
+  resetGame: () => void;
+}) {
+  const { status, word, resetGame } = props;
   return (
     <>
       {status === GameStatus.Won && (
@@ -17,7 +23,12 @@ export default function StatusBar(props: { status: GameStatus; word: string }) {
       )}
       {status !== GameStatus.Playing && (
         <div className="mt-4 text-blue-500 text-xl font-bold text-center">
-          Please refresh to play again.
+          <button
+            className="ml-2 px-4 py-2 bg-blue-500 text-white rounded"
+            onClick={resetGame}
+          >
+            Play Again
+          </button>
         </div>
       )}
     </>

@@ -1,6 +1,7 @@
 import { checkGuess } from "@/lib/CheckGuess";
 import LetterTile from "./LetterTile";
 
+// GuessHistoryBoard component that renders the history of guesses with their corresponding letter statuses.
 export default function GuessHistoryBoard(props: {
   guess: string;
   word: string;

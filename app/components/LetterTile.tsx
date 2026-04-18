@@ -1,5 +1,8 @@
 import { LetterStatus } from "@/lib/enumerations";
 
+// LetterTile component that renders a single letter tile with a specific status
+// (correct, present, absent, unused) based on the result of the guess evaluation.
+
 export default function LetterTile(props: {
   letter: string;
   status: LetterStatus;

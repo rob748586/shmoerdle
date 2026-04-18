@@ -1,3 +1,6 @@
+// LetterButton component that renders a single letter button for the virtual keyboard.
+// It takes a letter, a disabled state, and an onClick callback to handle button clicks.
+
 export default function LetterButton(props: {
   letter: string;
   disabled?: boolean;

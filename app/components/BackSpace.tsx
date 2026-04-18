@@ -1,3 +1,6 @@
+// BackSpace component that renders a backspace button, which can be disabled based on the game state.
+// When clicked, it triggers the onClick callback to delete the last entered letter.
+
 export default function BackSpace(props: {
   disabled?: boolean;
   onClick: () => void;

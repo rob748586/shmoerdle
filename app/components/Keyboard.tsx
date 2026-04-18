@@ -1,5 +1,9 @@
 import LetterButton from "./LetterButton";
 
+// Keyboard component that renders a virtual keyboard with letter buttons.
+// It takes an onLetterClick callback to handle letter clicks and a notFound array to
+// disable buttons for letters that have been guessed but are not in the word.
+
 export default function Keyboard(props: {
   onLetterClick: (letter: string) => void;
   notFound: string[];
