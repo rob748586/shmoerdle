@@ -3,9 +3,9 @@
 // Main game page component that manages the game state and renders the game interface, including the header,
 // guess history, input controls, and win/loss display.
 
-import { GameStatus } from "@/lib/enumerations";
+import { GameStatus, KeyCode } from "@/lib/enumerations";
 import { loadWordset, getMeanings } from "@/lib/WordServerActions";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import GuessHistoryBoard from "./components/GuessHistoryBoard";
 import InputControl from "./components/InputControl";
 import Header from "./components/Header";
@@ -18,6 +18,25 @@ export default function Home() {
   const [gameStatus, setGameStatus] = useState(GameStatus.Playing);
   const [notFound, setNotFound] = useState<string[]>([]);
   const [meanings, setMeanings] = useState<string[]>([]);
+
+  // Refs to keep latest state for event handler
+  const guessesRef = useRef(guesses);
+  const gameStatusRef = useRef(gameStatus);
+  const wordRef = useRef(word);
+  const notFoundRef = useRef(notFound);
+  useEffect(() => {
+    notFoundRef.current = notFound;
+  }, [notFound]);
+
+  useEffect(() => {
+    guessesRef.current = guesses;
+  }, [guesses]);
+  useEffect(() => {
+    gameStatusRef.current = gameStatus;
+  }, [gameStatus]);
+  useEffect(() => {
+    wordRef.current = word;
+  }, [word]);
 
   useEffect(() => {
     // fetch the wordset from the server.
@@ -55,14 +74,19 @@ export default function Home() {
   }
 
   function DeleteLetter() {
-    {
-      // remove the last letter from the guess and update the guesses list
-      const newGuess = (guesses[guesses.length - 1] || "").slice(0, -1);
-      setGuesses([...guesses.slice(0, -1), newGuess]);
-    }
+    // Use ref to get the latest guesses
+    const guesses = guessesRef.current;
+    const lastGuess = guesses[guesses.length - 1] || "";
+    if (lastGuess.length === 0) return;
+    const newGuess = lastGuess.slice(0, -1);
+    setGuesses([...guesses.slice(0, -1), newGuess]);
   }
 
   function LetterEntered(letter: string) {
+    // Use refs to get latest state
+    const guesses = guessesRef.current;
+    const gameStatus = gameStatusRef.current;
+    const word = wordRef.current;
     // safety check to prevent letter entry if the game is already won or lost.
     if (gameStatus !== GameStatus.Playing) {
       return;
@@ -109,6 +133,42 @@ export default function Home() {
       setGameStatus(GameStatus.Lost);
     }
   }
+
+  useEffect(() => {
+    const pressedKeys = new Set<string>();
+    function handleKeyDown(event: KeyboardEvent) {
+      let key = event.key;
+      if (key.length === 1 && key >= "a" && key <= "z") {
+        key = key.toUpperCase();
+      }
+      if (pressedKeys.has(key)) {
+        return;
+      }
+      if (key.length === 1 && key >= "A" && key <= "Z") {
+        if (notFoundRef.current.includes(key)) {
+          return;
+        }
+        LetterEntered(key);
+        pressedKeys.add(key);
+      } else if (key === "Backspace") {
+        DeleteLetter();
+        pressedKeys.add(key);
+      }
+    }
+    function handleKeyUp(event: KeyboardEvent) {
+      let key = event.key;
+      if (key.length === 1 && key >= "a" && key <= "z") {
+        key = key.toUpperCase();
+      }
+      pressedKeys.delete(key);
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keyup", handleKeyUp);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keyup", handleKeyUp);
+    };
+  }, []); // Only set up once
 
   const guess = guesses[guesses.length - 1] || "";
   return (
