@@ -19,7 +19,7 @@ function validateWord(word: string) {
 }
 
 export async function loadWordset() {
-  const filePath = process.cwd() + "/public/aacompletewordset.json";
+  const filePath = process.cwd() + "/public/extracted_meanings.json";
   const wordset = fs.readFileSync(filePath, "utf-8");
   const definitions = JSON.parse(wordset);
 
@@ -30,12 +30,10 @@ export async function loadWordset() {
 }
 
 export async function getMeanings(word: string) {
-  const filePath = process.cwd() + "/public/aacompletewordset.json";
+  const filePath = process.cwd() + "/public/extracted_meanings.json";
   const wordset = fs.readFileSync(filePath, "utf-8");
   const definitions = JSON.parse(wordset);
-  const meanings = definitions[word].meanings.map(
-    (meaning: any) => meaning.def,
-  );
+  const meanings = definitions[word];
 
   return meanings;
 }
