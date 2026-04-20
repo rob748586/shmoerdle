@@ -23,17 +23,5 @@ export async function loadWordset() {
   const wordset = fs.readFileSync(filePath, "utf-8");
   const definitions = JSON.parse(wordset);
 
-  const filtered = Object.keys(definitions).filter((word) =>
-    validateWord(word.toUpperCase()),
-  );
-  return filtered;
-}
-
-export async function getMeanings(word: string) {
-  const filePath = process.cwd() + "/public/extracted_meanings.json";
-  const wordset = fs.readFileSync(filePath, "utf-8");
-  const definitions = JSON.parse(wordset);
-  const meanings = definitions[word];
-
-  return meanings;
+  return definitions;
 }

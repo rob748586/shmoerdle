@@ -8,7 +8,7 @@ export default function GameWinLoseDisplay(props: {
   meanings: string[];
   resetGame: () => void;
 }) {
-  const { status, word, resetGame } = props;
+  const { status, word, resetGame, meanings } = props;
   const capitalizedWord = word[0].toUpperCase() + word.slice(1);
   return (
     <>
@@ -28,7 +28,7 @@ export default function GameWinLoseDisplay(props: {
           <div className="mt-4 text-gray-700 text-lg font-sm text-center border p-2 rounded bg-gray-100 dark:bg-gray-800 dark:text-gray-200 mx-4">
             <strong>{capitalizedWord}</strong>:
             <div className="mt-2 font-xs mx-4">
-              {props.meanings.map((meaning, index) => (
+              {meanings.map((meaning, index) => (
                 <p key={index}>
                   {"- "}
                   {meaning}
