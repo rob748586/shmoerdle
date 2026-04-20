@@ -22,8 +22,6 @@ export function checkGuess(guess: string, word: string): LetterStatus[] {
   word = word.toLowerCase();
   const statusArray: LetterStatus[] = [];
 
-  console.log(`Checking guess: ${guess} against word: ${word}`);
-
   for (let i = 0; i < guess.length; i++) {
     if (guess[i] === word[i]) {
       if (!foundAllInWord(guess, word, guess[i]))

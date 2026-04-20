@@ -24,7 +24,6 @@ export default function LetterTile(props: {
 
   const tileClass = statusClasses[status] || "bg-gray-200 text-gray-500";
 
-  console.log(status);
   return (
     <div
       className={`relative w-12 h-12 flex items-center justify-center text-2xl font-bold ${tileClass}`}
