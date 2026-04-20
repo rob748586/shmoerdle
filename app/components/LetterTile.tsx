@@ -29,7 +29,7 @@ export default function LetterTile(props: {
       className={`relative w-12 h-12 flex items-center justify-center text-2xl font-bold ${tileClass}`}
     >
       {status === LetterStatus.FoundSome ? (
-        <div className="absolute top-0 left-0 right-0 bg-green-500 opacity-50 h-[50%] z-5" />
+        <div className="absolute top-0 left-0 right-0 bg-green-500 h-[50%] z-5" />
       ) : null}
       <div className={`relative z-100`}>{letter}</div>
     </div>
