@@ -10,8 +10,10 @@ export default function LetterTile(props: {
   const { letter, status } = props;
 
   const statusClasses = {
-    [LetterStatus.Correct]:
+    [LetterStatus.FoundAll]:
       "bg-green-500 text-white border border-gray-400 rounded-md",
+    [LetterStatus.FoundSome]:
+      "bg-yellow-500 text-white border border-gray-400 rounded-md",
     [LetterStatus.Present]:
       "bg-yellow-500 text-white border border-gray-400 rounded-md",
     [LetterStatus.Absent]:
@@ -22,11 +24,15 @@ export default function LetterTile(props: {
 
   const tileClass = statusClasses[status] || "bg-gray-200 text-gray-500";
 
+  console.log(status);
   return (
     <div
-      className={`w-12 h-12 flex items-center justify-center text-2xl font-bold ${tileClass}`}
+      className={`relative w-12 h-12 flex items-center justify-center text-2xl font-bold ${tileClass}`}
     >
-      {letter}
+      {status === LetterStatus.FoundSome ? (
+        <div className="absolute top-0 left-0 right-0 bg-green-500 opacity-50 h-[50%] z-5" />
+      ) : null}
+      <div className={`relative z-100`}>{letter}</div>
     </div>
   );
 }

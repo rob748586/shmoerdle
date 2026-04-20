@@ -1,5 +1,6 @@
 export enum LetterStatus {
-  Correct = "correct",
+  FoundSome = "foundsome",
+  FoundAll = "foundall",
   Present = "present",
   Absent = "absent",
   Unused = "unused",
