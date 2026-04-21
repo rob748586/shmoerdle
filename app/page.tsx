@@ -15,6 +15,20 @@ interface WordMeanings {
   [word: string]: string[];
 }
 
+function saveWordsetToLocalStorage(wordset: WordMeanings) {
+  // Save the wordset to local storage as a JSON string for later retrieval.
+  localStorage.setItem("wordset", JSON.stringify(wordset));
+}
+
+function loadWordsetFromLocalStorage(): WordMeanings | null {
+  // Load the wordset from local storage, parsing the JSON string back into an object.
+  const wordsetString = localStorage.getItem("wordset");
+  if (wordsetString) {
+    return JSON.parse(wordsetString);
+  }
+  return null;
+}
+
 export default function Home() {
   const [guesses, setGuesses] = useState<string[]>([]);
   const [word, setWord] = useState<string | null>(null);
@@ -45,9 +59,18 @@ export default function Home() {
   useEffect(() => {
     // fetch the wordset from the server.
     async function fetchWordset() {
-      const wordset = await loadWordset();
-      setWords(Object.keys(wordset));
-      setMeanings(wordset);
+      const wordset = loadWordsetFromLocalStorage();
+      if (wordset) {
+        setWords(Object.keys(wordset));
+        setMeanings(wordset);
+      } else {
+        const wordset = await loadWordset();
+
+        saveWordsetToLocalStorage(wordset);
+
+        setWords(Object.keys(wordset));
+        setMeanings(wordset);
+      }
     }
     // choose a random word from the wordset and set it as the current word to guess.
     function chooseRandomWord() {
@@ -58,6 +81,7 @@ export default function Home() {
       const randomWord = words[randomIndex];
       setWord(randomWord);
     }
+
     // If the wordset is not loaded, fetch it and choose a random word.
     if (words.length === 0) {
       fetchWordset().then(() => chooseRandomWord());
