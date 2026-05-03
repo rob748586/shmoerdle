@@ -1,3 +1,4 @@
+import { LetterStatus } from "@/lib/enumerations";
 import LetterButton from "./LetterButton";
 
 // Keyboard component that renders a virtual keyboard with letter buttons.
@@ -7,8 +8,11 @@ import LetterButton from "./LetterButton";
 export default function Keyboard(props: {
   onLetterClick: (letter: string) => void;
   notFound: string[];
+  foundExact: string[];
+  foundInWord: string[];
+  foundSome: string[];
 }) {
-  const { onLetterClick } = props;
+  const { onLetterClick, notFound, foundExact, foundInWord, foundSome } = props;
   const rows = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"];
   const buttons = rows.map((row, rowIndex) => (
     <div key={rowIndex} className="flex justify-center gap-1">
@@ -16,7 +20,20 @@ export default function Keyboard(props: {
         <LetterButton
           key={letter}
           letter={letter}
-          disabled={props.notFound.includes(letter)}
+          disabled={notFound.includes(letter)}
+          status={
+            foundExact.includes(letter)
+              ? LetterStatus.FoundAll
+              : foundInWord.includes(letter)
+                ? LetterStatus.Present
+                : foundInWord.includes(letter)
+                  ? LetterStatus.FoundSome
+                  : foundSome.includes(letter)
+                    ? LetterStatus.FoundSome
+                    : notFound.includes(letter)
+                      ? LetterStatus.Absent
+                      : undefined
+          }
           onClick={onLetterClick}
         />
       ))}

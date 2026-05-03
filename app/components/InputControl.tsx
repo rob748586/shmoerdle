@@ -8,10 +8,21 @@ import Keyboard from "./Keyboard";
 export default function InputControl(props: {
   guess: string;
   notFound: string[];
+  foundExact: string[];
+  foundInWord: string[];
+  foundSome: string[];
   onLetterEntered: (letter: string) => void;
   onDelete: () => void;
 }) {
-  const { guess, notFound, onLetterEntered, onDelete } = props;
+  const {
+    guess,
+    notFound,
+    foundExact,
+    foundInWord,
+    foundSome,
+    onLetterEntered,
+    onDelete,
+  } = props;
 
   return (
     <>
@@ -25,7 +36,10 @@ export default function InputControl(props: {
         <BackSpace onClick={() => onDelete()} />
       </div>
       <Keyboard
+        foundExact={foundExact}
+        foundInWord={foundInWord}
         notFound={notFound}
+        foundSome={foundSome}
         onLetterClick={(letter: string) => onLetterEntered(letter)}
       />
     </>

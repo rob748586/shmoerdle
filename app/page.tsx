@@ -29,12 +29,31 @@ function loadWordsetFromLocalStorage(): WordMeanings | null {
   return null;
 }
 
+function foundAll(letter: string, guess: string, word: string) {
+  // Helper function to check if all letters in the guess are in the correct position in the word.
+  let countInGuess = 0;
+  let countInWord = 0;
+
+  for (let i = 0; i < guess.length; i++) {
+    if (guess[i].toUpperCase() === letter.toUpperCase()) {
+      countInGuess++;
+      if (word[i].toUpperCase() === letter.toUpperCase()) {
+        countInWord++;
+      }
+    }
+  }
+  return countInGuess === countInWord;
+}
+
 export default function Home() {
   const [guesses, setGuesses] = useState<string[]>([]);
   const [word, setWord] = useState<string | null>(null);
   const [words, setWords] = useState<string[]>([]);
   const [gameStatus, setGameStatus] = useState(GameStatus.Playing);
   const [notFound, setNotFound] = useState<string[]>([]);
+  const [foundExact, setFoundExact] = useState<string[]>([]);
+  const [foundInWord, setFoundInWord] = useState<string[]>([]);
+  const [foundSome, setFoundSome] = useState<string[]>([]);
   const [meanings, setMeanings] = useState<WordMeanings>({});
 
   // Refs to keep latest state for event handler
@@ -42,9 +61,15 @@ export default function Home() {
   const gameStatusRef = useRef(gameStatus);
   const wordRef = useRef(word);
   const notFoundRef = useRef(notFound);
+  const foundExactRef = useRef(foundExact);
+  const foundInWordRef = useRef(foundInWord);
+
   useEffect(() => {
     notFoundRef.current = notFound;
   }, [notFound]);
+  useEffect(() => {
+    foundExactRef.current = foundExact;
+  }, [foundExact]);
 
   useEffect(() => {
     guessesRef.current = guesses;
@@ -97,6 +122,10 @@ export default function Home() {
     // resets the game state and chooses a new random word from the wordset.
     setGuesses([]);
     setNotFound([]);
+    setFoundExact([]);
+    setFoundInWord([]);
+    setFoundSome([]);
+
     setGameStatus(GameStatus.Playing);
     setWord(null);
   }
@@ -137,6 +166,33 @@ export default function Home() {
           if (!temp.includes(letter.toUpperCase())) {
             temp = [...temp, letter.toUpperCase()];
           }
+        }
+        if (
+          word?.toUpperCase()?.includes(letter.toUpperCase()) &&
+          word.toUpperCase().indexOf(letter.toUpperCase()) ===
+            newGuess.indexOf(letter.toUpperCase())
+        ) {
+          // If the letter is in the correct position, add it to the foundExact list.
+          if (foundAll(letter, newGuess, word)) {
+            setFoundExact((prev) => [...prev, letter.toUpperCase()]);
+            setFoundSome((prev) =>
+              prev.filter((l) => l !== letter.toUpperCase()),
+            );
+          } else {
+            setFoundSome((prev) => [...prev, letter.toUpperCase()]);
+          }
+        }
+
+        if (
+          word?.toUpperCase()?.includes(letter.toUpperCase()) &&
+          word.toUpperCase().indexOf(letter.toUpperCase()) !==
+            newGuess.indexOf(letter.toUpperCase())
+        ) {
+          // If the letter is in the word but in the wrong position, add it to the foundInWord list.
+          setFoundInWord((prev) => [...prev, letter.toUpperCase()]);
+          setFoundSome((prev) =>
+            prev.filter((l) => l !== letter.toUpperCase()),
+          );
         }
       }
       // Update the notFound state with the new list of letters to disable on the keyboard.
@@ -219,6 +275,9 @@ export default function Home() {
             <InputControl
               guess={guess}
               notFound={notFound}
+              foundExact={foundExact}
+              foundInWord={foundInWord}
+              foundSome={foundSome}
               onLetterEntered={(letter: string) => LetterEntered(letter)}
               onDelete={() => DeleteLetter()}
             />
