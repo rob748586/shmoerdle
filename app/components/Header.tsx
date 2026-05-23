@@ -7,7 +7,7 @@ export default function Header() {
     <>
       <Image
         className="height-auto"
-        src="/shmoerdle.png"
+        src="/shmoerdle.webp"
         loading="eager"
         alt="Logo"
         width={200}
