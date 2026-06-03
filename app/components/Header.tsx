@@ -13,9 +13,9 @@ export default function Header() {
         width={200}
         height={200}
       />
-      <p className="text-2xl mx-4 text-center text-gray-700 dark:text-gray-300">
+      <h1 className="text-2xl mx-4 text-center text-gray-700 dark:text-gray-300">
         A wordle clone built with Next.js and Tailwind CSS.
-      </p>
+      </h1>
     </>
   );
 }
