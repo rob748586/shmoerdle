@@ -1,5 +1,7 @@
+User-agent: Googlebot
+Allow: /
+
 User-agent: *
-Disallow: /components/
 Allow: /
 
 Sitemap: https://shmoerdle.vercel.app/sitemap.xml
