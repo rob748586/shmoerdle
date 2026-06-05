@@ -256,7 +256,7 @@ export default function Home() {
 
   const guess = guesses[guesses.length - 1] || "";
   return (
-    <div className="flex flex-col flex-1 items-center justify-start bg-zinc-200 font-sans dark:bg-black ">
+    <div className="flex flex-col flex-1 items-center justify-start">
       <Header />
       {words.length > 0 && (
         <div className="text-lg">
