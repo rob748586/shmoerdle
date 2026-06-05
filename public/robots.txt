@@ -2,4 +2,4 @@ User-agent: *
 Disallow: /components/
 Allow: /
 
-Sitemap: https://shmoerdle.vercel.app/
+Sitemap: https://shmoerdle.vercel.app/sitemap.xml
