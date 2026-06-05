@@ -36,8 +36,8 @@ export default function RootLayout({
       </Head>
       <body className="min-h-full flex flex-col">
         <Analytics />
-        {children}
-        <p className="text-center text-sm text-gray-700 absolute bottom-4 w-full">
+        <div className="mb-8">{children}</div>
+        <p className="text-center text-sm text-gray-700 w-full">
           Rob Hine, 2026.{" "}
           <a
             href="https://github.com/rob748586/shmoerdle"
