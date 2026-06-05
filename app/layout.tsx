@@ -34,10 +34,12 @@ export default function RootLayout({
         <Link rel="preload" href="/shmoerdle.png" as="image" type="image/png" />
         <Link rel="preload" href="/globals.css" as="style" type="text/css" />
       </Head>
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col min-h-screen ">
         <Analytics />
-        <div className="bg-zinc-200 font-sans dark:bg-black">{children}</div>
-        <p className="text-center text-sm text-gray-700 w-full fixed-bottom  bg-zinc-200 font-sans dark:bg-black py-4">
+        <div className="bg-zinc-200 font-sans dark:bg-black py-4 flex grow">
+          {children}
+        </div>
+        <p className="text-center text-sm text-gray-700 w-full fixed-bottom bg-zinc-200 font-sans dark:bg-black py-4">
           Rob Hine, 2026.{" "}
           <a
             href="https://github.com/rob748586/shmoerdle"
