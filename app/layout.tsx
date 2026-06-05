@@ -37,6 +37,12 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <Analytics />
         {children}
+        <a
+          href="https://github.com/rob748586/shmoerdle"
+          className="text-center text-sm text-gray-700 absolute bottom-4 w-full"
+        >
+          Rob Hine, 2026. View source code on GitHub
+        </a>
       </body>
     </html>
   );
